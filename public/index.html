@@ -36,19 +36,56 @@
 
         // GETリクエスト
         async getData() {
-          const res = await fetch('/api');
+          const query = new URLSearchParams({
+          name: this.name,
+          rank: this.rank
+        });
+          const res = await fetch(`/api/${this.name}/${this.rank}`);
           const data = await res.json();
           this.data = JSON.stringify(data, null, 2);
         },
 
         // POSTリクエスト
-        async postData() {},
+        async postData() {
+          const body = new FormData();
+          body.append('name', this.name);
+          body.append('rank', this.rank);
+          
+          const res = await fetch('/api', {
+            method: 'post',
+            body: body
+          });
+          const data = await res.json();
+          this.data = JSON.stringify(data, null, 2);
+        },
+
 
         // PUTリクエスト
-        async putData() {},
+        async putData() {
+          const body = JSON.stringify({
+              name: this.name,
+              rank: this.rank
+          });
+
+          const res = await fetch(`/api/${this.name}` , {
+            method: 'put',
+            headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+            body: JSON.stringify(body)
+          });
+          const data = await res.json();
+          this.data = JSON.stringify(data, null, 2);
+        },
 
         // DELETEリクエスト
-        async deleteData() {}
+        async deleteData() {
+          const res = await fetch(`/api/${this.name}` , {
+            method: 'delete'
+          });
+          const data = await res.json();
+          this.data = JSON.stringify(data, null, 2);
+        }
       };
     }
   </script>
